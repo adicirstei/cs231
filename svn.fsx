@@ -23,9 +23,14 @@ let X' = matrix [[5.0; 3.0; 1.0; 2.0;  1.0]
                  [5.0; 3.0; 1.0; 2.0;  1.0]
                  [3.0; 1.0; 1.0; 2.0;  1.0]]
 
-let Y = [|1; 2; 3; 4; 5; 6; 7; 8; 9|]
+let Y = [|1; 2; 0; 0; 1; 0; 2; 2; 1|]
 let scores = W * X'.Transpose()
 
+let margins = Matrix.mapi (fun i j s -> 
+  if i = Y.[j] then 0.0
+  else System.Math.Max(0.0, s - scores.[Y.[j], j] + 1.0) ) scores
+
+Matrix.sumAbsRows margins
 
 
 let img = Utils.getRandomImageData()
